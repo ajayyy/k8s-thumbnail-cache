@@ -1,0 +1,31 @@
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: zerossl
+spec:
+  acme:
+    server: https://acme.zerossl.com/v2/DV90
+    externalAccountBinding:
+      keyID: ms0O4sY0Vix0Qp9m5E_51A
+      keySecretRef:
+        name: zero-ssl-eabsecret
+        key: secret
+    privateKeySecretRef:
+      name: zerossl-prod
+    solvers:
+    - http01:
+        ingress:
+          class: traefik
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: thumbnail-cache-cert
+spec:
+  dnsNames:
+    - dearrow-thumb.ajay.app
+  secretName: thumbnail-cache-cert
+  issuerRef:
+    name: zerossl
+    kind: ClusterIssuer

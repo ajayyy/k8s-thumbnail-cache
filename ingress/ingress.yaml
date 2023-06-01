@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: thumbnail-cache-ingress
+spec:
+  tls:
+    - secretName: thumbnail-cache-cert
+  rules:
+    - host: dearrow-thumb.ajay.app
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: thumbnail-cache-service
+                port:
+                  number: 3001

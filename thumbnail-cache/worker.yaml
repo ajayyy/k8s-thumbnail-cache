@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: thumbnail-cache-worker-deployment
+spec:
+  replicas: 200
+  selector:
+    matchLabels:
+      app: thumbnail-cache-worker
+  template:
+    metadata:
+      labels:
+        app: thumbnail-cache-worker
+    spec:
+      containers:
+      - image: ghcr.io/ajayyy/thumbnail-cache-worker@sha256:b541e68a26604bc31edcb6cb97b7fa1df6a2ece327443c5a551fd2b5248daf90
+        name: thumbnail-cache-worker
+        volumeMounts:
+          - mountPath: "/app/config.yaml"
+            name: config
+            subPath: config.yaml
+          - mountPath: "/app/cache"
+            name: cache
+        ports:
+          - containerPort: 3002
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3002
+          initialDelaySeconds: 3
+          periodSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 3002
+          initialDelaySeconds: 3
+          periodSeconds: 3
+      volumes:
+        - name: cache
+          persistentVolumeClaim:
+            claimName: thumbnail-cache-pvc
+        - name: config
+          configMap:
+            name: thumbnail-cache-config
+            items:
+              - key: cache-config
+                path: config.yaml
