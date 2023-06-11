@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: thumbnail-cache-worker-deployment
 spec:
-  replicas: 200
+  replicas: 25
   selector:
     matchLabels:
       app: thumbnail-cache-worker
@@ -13,7 +13,7 @@ spec:
         app: thumbnail-cache-worker
     spec:
       containers:
-      - image: ghcr.io/ajayyy/thumbnail-cache-worker@sha256:b541e68a26604bc31edcb6cb97b7fa1df6a2ece327443c5a551fd2b5248daf90
+      - image: ghcr.io/ajayyy/thumbnail-cache-worker@sha256:4b6ab05cccdd08032db8f57ded20d183f198e7ebf8dd3fe68c6f1fbb294056e7
         name: thumbnail-cache-worker
         volumeMounts:
           - mountPath: "/app/config.yaml"
