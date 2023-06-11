@@ -6,3 +6,5 @@ data:
   redis-config: |
     maxmemory-policy allkeys-lru
     maxmemory 4500mb
+
+    timeout 60
