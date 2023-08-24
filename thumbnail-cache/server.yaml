@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: thumbnail-cache-deployment
 spec:
-  replicas: 25
+  replicas: 10
   selector:
     matchLabels:
       app: thumbnail-cache
@@ -13,7 +13,7 @@ spec:
         app: thumbnail-cache
     spec:
       containers:
-      - image: ghcr.io/ajayyy/thumbnail-cache@sha256:42e6d9ae7c6e1e076aa209b94006fe8cddc3bee3f51477860beaf54e37948cdf
+      - image: ghcr.io/ajayyy/thumbnail-cache@sha256:a19d9113127286804c9604896242f546d8fcf8a25e98bfa6bd50c4623d5f96d1
         name: thumbnail-cache
         volumeMounts:
           - mountPath: "/app/config.yaml"

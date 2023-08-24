@@ -1,0 +1,44 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wireproxy-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wireproxy
+  template:
+    metadata:
+      labels:
+        app: wireproxy
+    spec:
+      containers:
+      - image: ghcr.io/pufferffish/wireproxy:latest
+        name: wireproxy
+        volumeMounts:
+          - mountPath: "/etc/wireproxy"
+            name: config
+        securityContext:
+          capabilities:
+            add: 
+              - "NET_ADMIN"
+      volumes:
+        - name: config
+          secret:
+            secretName: wireproxy-secrets
+            items:
+            - key: config-1
+              path: config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wireproxy-service
+spec:
+  ports:
+  - port: 8888
+    protocol: TCP
+    targetPort: 8888
+  selector:
+    app: wireproxy
