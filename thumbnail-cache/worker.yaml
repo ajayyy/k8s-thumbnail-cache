@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: thumbnail-cache-worker-deployment
 spec:
-  replicas: 55 #65 85
+  replicas: 60 #65 85
   selector:
     matchLabels:
       app: thumbnail-cache-worker
