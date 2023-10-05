@@ -6,6 +6,8 @@ metadata:
 # Maybe not needed
 spec:
   valuesContent: |-
+    experimental:
+      http3: true
     providers:
       kubernetesCRD:
         allowCrossNamespace: true
