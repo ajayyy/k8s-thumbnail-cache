@@ -42,3 +42,47 @@ spec:
     targetPort: 8888
   selector:
     app: wireproxy
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wireproxy2-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wireproxy2
+  template:
+    metadata:
+      labels:
+        app: wireproxy2
+    spec:
+      containers:
+      - image: ghcr.io/pufferffish/wireproxy:latest
+        name: wireproxy2
+        volumeMounts:
+          - mountPath: "/etc/wireproxy"
+            name: config
+        securityContext:
+          capabilities:
+            add: 
+              - "NET_ADMIN"
+      volumes:
+        - name: config
+          secret:
+            secretName: wireproxy-secrets
+            items:
+            - key: config-2
+              path: config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: wireproxy2-service
+spec:
+  ports:
+  - port: 8888
+    protocol: TCP
+    targetPort: 8888
+  selector:
+    app: wireproxy2
