@@ -13,7 +13,7 @@ spec:
         app: thumbnail-cache-worker
     spec:
       containers:
-      - image: ghcr.io/ajayyy/thumbnail-cache-worker@sha256:072af39ec45b054c8be84352a9b47a5db192269b365b2c9465214325f9decd75
+      - image: ghcr.io/ajayyy/thumbnail-cache-worker@sha256:7624c647d8564c1613af62c6269c61f280dab5ac25efb3189e1b9b52100ea735
         name: thumbnail-cache-worker
         volumeMounts:
           - mountPath: "/app/config.yaml"
@@ -23,6 +23,9 @@ spec:
             name: cache
         ports:
           - containerPort: 3002
+        resources:
+          limits:
+            memory: 700Mi
         livenessProbe:
           httpGet:
             path: /
