@@ -13,7 +13,7 @@ spec:
         app: thumbnail-cache
     spec:
       containers:
-      - image: ghcr.io/ajayyy/thumbnail-cache@sha256:a3bb17ca72da6ba8c96270083f60f48c68e0a8a658c7948c0c660b2f040c5f92
+      - image: ghcr.io/ajayyy/thumbnail-cache@sha256:fbc210079ea7e084ee380acb49d5833a1b8c548f0f83dda9ece4d2fedcada0fd
         name: thumbnail-cache
         volumeMounts:
           - mountPath: "/app/config.yaml"
@@ -52,10 +52,28 @@ apiVersion: v1
 kind: Service
 metadata:
   name: thumbnail-cache-service
+  labels:
+    app: thumbnail-cache
 spec:
   ports:
   - port: 3001
     protocol: TCP
     targetPort: 3001
+    name: web
   selector:
     app: thumbnail-cache
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: thumbnail-cache-servicemonitor
+  labels:
+    app: thumbnail-cache
+    release: prometheus-operator
+spec:
+  endpoints:
+  - port: web
+    interval: 1m
+  selector:
+    matchLabels:
+      app: thumbnail-cache

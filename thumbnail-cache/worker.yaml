@@ -13,7 +13,7 @@ spec:
         app: thumbnail-cache-worker
     spec:
       containers:
-      - image: ghcr.io/ajayyy/thumbnail-cache-worker@sha256:7624c647d8564c1613af62c6269c61f280dab5ac25efb3189e1b9b52100ea735
+      - image: ghcr.io/ajayyy/thumbnail-cache-worker@sha256:21aae610418d6f479985c64ed1261b4486497bc9c931a2fd8b32e9c7335e3b09
         name: thumbnail-cache-worker
         volumeMounts:
           - mountPath: "/app/config.yaml"

@@ -14,3 +14,9 @@ cmctl x install --dry-run > cert-manager.custom.yaml
 ```
 
 The cert manager yaml has already been created and is in `certs`
+
+#### Install Grafana
+
+```bash
+helmfile -f grafana/helmfile.yaml apply
+```
