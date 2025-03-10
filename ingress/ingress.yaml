@@ -23,7 +23,6 @@ metadata:
   name: graph-ingress
   namespace: monitoring
 spec:
-  ingressClassName: nginx
   tls:
     - secretName: graph-cert
   rules:

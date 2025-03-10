@@ -37,7 +37,7 @@ metadata:
   namespace: monitoring
 spec:
   dnsNames:
-    - graph.sponsor.ajay.app
+    - graph.dearrow-thumb.ajay.app
   secretName: graph-cert
   issuerRef:
     name: zerossl

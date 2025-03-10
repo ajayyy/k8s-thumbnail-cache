@@ -14,22 +14,23 @@ spec:
         app: wireproxy
     spec:
       containers:
-      - image: ghcr.io/pufferffish/wireproxy:latest
+      - image: ghcr.io/ajayyy/wireproxy-rotator:latest
         name: wireproxy
-        volumeMounts:
-          - mountPath: "/etc/wireproxy"
-            name: config
         securityContext:
           capabilities:
             add: 
               - "NET_ADMIN"
-      volumes:
-        - name: config
-          secret:
-            secretName: wireproxy-secrets
-            items:
-            - key: config-1
-              path: config
+        env:
+          - name: TIMEOUT
+            value: "3600"
+          - name: "FAIL_CHECK_TIME"
+            value: "20"
+          - name: COUNTRIES
+            value: "Finland,UK,USA,Canada"
+          - name: PRIVATE_KEY
+            valueFrom: { secretKeyRef: { name: wireproxy-secrets, key: PRIVATE_KEY } }
+          - name: ADDRESS
+            valueFrom: { secretKeyRef: { name: wireproxy-secrets, key: ADDRESS } }
 ---
 apiVersion: v1
 kind: Service
@@ -40,6 +41,11 @@ spec:
   - port: 8888
     protocol: TCP
     targetPort: 8888
+    name: proxy
+  - port: 8000
+    protocol: TCP
+    targetPort: 8000
+    name: status
   selector:
     app: wireproxy
 ---
@@ -58,22 +64,23 @@ spec:
         app: wireproxy2
     spec:
       containers:
-      - image: ghcr.io/pufferffish/wireproxy:latest
+      - image: ghcr.io/ajayyy/wireproxy-rotator:latest
         name: wireproxy2
-        volumeMounts:
-          - mountPath: "/etc/wireproxy"
-            name: config
         securityContext:
           capabilities:
             add: 
               - "NET_ADMIN"
-      volumes:
-        - name: config
-          secret:
-            secretName: wireproxy-secrets
-            items:
-            - key: config-2
-              path: config
+        env:
+          - name: TIMEOUT
+            value: "3600"
+          - name: "FAIL_CHECK_TIME"
+            value: "20"
+          - name: COUNTRIES
+            value: "Finland,UK,USA,Canada"
+          - name: PRIVATE_KEY
+            valueFrom: { secretKeyRef: { name: wireproxy-secrets, key: PRIVATE_KEY2 } }
+          - name: ADDRESS
+            valueFrom: { secretKeyRef: { name: wireproxy-secrets, key: ADDRESS2 } }
 ---
 apiVersion: v1
 kind: Service
@@ -84,5 +91,54 @@ spec:
   - port: 8888
     protocol: TCP
     targetPort: 8888
+    name: proxy
+  - port: 8000
+    protocol: TCP
+    targetPort: 8000
+    name: status
   selector:
     app: wireproxy2
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: wireproxy3-deployment
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: wireproxy3
+#   template:
+#     metadata:
+#       labels:
+#         app: wireproxy3
+#     spec:
+#       containers:
+#       - image: ghcr.io/pufferffish/wireproxy:latest
+#         name: wireproxy3
+#         volumeMounts:
+#           - mountPath: "/etc/wireproxy"
+#             name: config
+#         securityContext:
+#           capabilities:
+#             add: 
+#               - "NET_ADMIN"
+#       volumes:
+#         - name: config
+#           secret:
+#             secretName: wireproxy-secrets
+#             items:
+#             - key: config-3
+#               path: config
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: wireproxy3-service
+# spec:
+#   ports:
+#   - port: 8888
+#     protocol: TCP
+#     targetPort: 8888
+#   selector:
+#     app: wireproxy3

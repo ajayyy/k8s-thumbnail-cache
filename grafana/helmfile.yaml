@@ -42,6 +42,8 @@ releases:
       value: 500m
     - name: prometheus.prometheusSpec.retention
       value: "90d"
+    - name: prometheus.prometheusSpec.retentionSize
+      value: "10GiB"
     - name: prometheus.prometheusSpec.scrapeInterval
       value: "30s"
     - name: prometheus.prometheusSpec.evaluationInterval
